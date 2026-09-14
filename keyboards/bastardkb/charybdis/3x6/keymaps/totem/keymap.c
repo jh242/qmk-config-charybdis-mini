@@ -3,10 +3,11 @@
 //
 // Totem layers/alphas kept; thumbs & pinkies reworked for HRM:
 //   - Home-row mods own Gui/Alt/Ctrl/Shift → thumbs are NOT mod-taps
-//   - Thumbs: NAV · Bspc · Ent | SYM · Spc  (layers = MO, zero tap latency)
-//   - Pinky outers: Esc/`/Tab and '/\/- (Bspc vacated the bottom-right)
+//   - Thumbs: NAV · Bspc · Ent | SYM · Spc
+//   - Left pinkies: Tab / ` / MOUSE (hold for POINTER)
+//   - Right pinkies: ' / \ / -
 //   Combos: J+K → Esc, Z+X → Caps Word
-//   POINTER via QMK auto-mouse (Voyager-style trackball trigger)
+//   Auto-mouse OFF — palm rests on the ball while typing; use MOUSE pinky.
 
 #include QMK_KEYBOARD_H
 
@@ -30,13 +31,14 @@ enum layers {
 
 #define NAV MO(LAYER_NAV)
 #define SYM MO(LAYER_SYM)
+#define MSE MO(LAYER_POINTER)
 
 // clang-format off
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   [LAYER_BASE] = LAYOUT(
-       KC_ESC,  KC_Q,    KC_W,    KC_E,    KC_R,    KC_T,        KC_Y,    KC_U,    KC_I,    KC_O,    KC_P,    KC_QUOT,
+       KC_TAB,  KC_Q,    KC_W,    KC_E,    KC_R,    KC_T,        KC_Y,    KC_U,    KC_I,    KC_O,    KC_P,    KC_QUOT,
        KC_GRV,  HRM_A,   HRM_S,   HRM_D,   HRM_F,   KC_G,        KC_H,    HRM_J,   HRM_K,   HRM_L,   HRM_SCLN,KC_BSLS,
-       KC_TAB,  KC_Z,    KC_X,    KC_C,    KC_V,    KC_B,        KC_N,    KC_M,    KC_COMM, KC_DOT,  KC_SLSH, KC_MINS,
+       MSE,     KC_Z,    KC_X,    KC_C,    KC_V,    KC_B,        KC_N,    KC_M,    KC_COMM, KC_DOT,  KC_SLSH, KC_MINS,
                                   NAV,     KC_BSPC, KC_ENT,      SYM,     KC_SPC
   ),
 
@@ -83,6 +85,6 @@ layer_state_t layer_state_set_user(layer_state_t state) {
 }
 
 void pointing_device_init_user(void) {
-    set_auto_mouse_layer(LAYER_POINTER);
-    set_auto_mouse_enable(true);
+    // Palm rests on the ball while typing — do not auto-enter POINTER.
+    set_auto_mouse_enable(false);
 }
