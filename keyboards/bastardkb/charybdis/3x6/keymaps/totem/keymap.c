@@ -3,7 +3,7 @@
 //
 // Totem layers/alphas kept; thumbs & pinkies reworked for HRM:
 //   - Home-row mods own Gui/Alt/Ctrl/Shift → thumbs are NOT mod-taps
-//   - Thumbs: Bspc · NAV · Ent | Spc · SYM  (layers = MO, zero tap latency)
+//   - Thumbs: NAV · Bspc · Ent | SYM · Spc  (layers = MO, zero tap latency)
 //   - Pinky outers: Esc/`/Tab and '/\/- (Bspc vacated the bottom-right)
 //   Combos: J+K → Esc, Z+X → Caps Word
 //   POINTER via QMK auto-mouse (Voyager-style trackball trigger)
@@ -37,7 +37,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
        KC_ESC,  KC_Q,    KC_W,    KC_E,    KC_R,    KC_T,        KC_Y,    KC_U,    KC_I,    KC_O,    KC_P,    KC_QUOT,
        KC_GRV,  HRM_A,   HRM_S,   HRM_D,   HRM_F,   KC_G,        KC_H,    HRM_J,   HRM_K,   HRM_L,   HRM_SCLN,KC_BSLS,
        KC_TAB,  KC_Z,    KC_X,    KC_C,    KC_V,    KC_B,        KC_N,    KC_M,    KC_COMM, KC_DOT,  KC_SLSH, KC_MINS,
-                                  KC_BSPC, NAV,     KC_ENT,      KC_SPC,  SYM
+                                  NAV,     KC_BSPC, KC_ENT,      SYM,     KC_SPC
   ),
 
   [LAYER_NAV] = LAYOUT(

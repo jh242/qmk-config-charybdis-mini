@@ -9,16 +9,16 @@ rewritten for home-row mods, plus Voyager-style **auto mouse** on the trackball.
 | Layer | How | Notes |
 |-------|-----|-------|
 | **BASE** | default | Home-row mods: `A` Gui · `S` Alt · `D` Ctrl · `F` Shift / `J` Shift · `K` Ctrl · `L` Alt · `;` Gui |
-| **NAV** | hold left-thumb NAV | Numbers left, vim arrows + Home/End/Pg right |
-| **SYM** | hold right-thumb SYM | Symbols / brackets |
+| **NAV** | hold left-outer thumb | Numbers left, vim arrows + Home/End/Pg right |
+| **SYM** | hold right-inner thumb | Symbols / brackets |
 | **NUM** | NAV + SYM together | F-keys + numpad (BT → RGB / boot / EEPROM clear) |
 | **POINTER** | move trackball | Mouse buttons, DPI, sniping, drag-scroll |
 
 **Thumbs** (no mod-taps — HRM already owns the mods):
 
-`Bspc` · `NAV` · `Enter` | `Space` · `SYM`
+`NAV` · `Bspc` · `Enter` | `SYM` · `Space`
 
-**Pinky outers:** `Esc` `` ` `` `Tab` / `'` `\` `-` (Bspc moved to thumb)
+**Pinky outers:** `Esc` `` ` `` `Tab` / `'` `\` `-`
 
 **Combos:** `J`+`K` → Esc · `Z`+`X` → Caps Word
 
