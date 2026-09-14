@@ -24,15 +24,12 @@
 #define RGBLIGHT_LED_COUNT 41
 
 /*
- * Cursor speed: MX Ergo–ish (~1000 DPI) is set in keymap.c via
- * bkpd_set_pointer_default_dpi(). Sniping stays hold-only (no auto-snipe).
+ * Cursor speed: ~800 DPI (set in keymap.c). Sniping stays hold-only.
  */
 
 /*
  * Auto-mouse: ~1 cm of ball travel before POINTER activates.
- *
- * AUTO_MOUSE_THRESHOLD is accumulated report motion. At 1000 DPI:
- * 1000 counts/inch ≈ 394 counts/cm → 400 ≈ 1 cm.
+ * Accumulated report motion (QMK default is 10).
  */
 #ifdef AUTO_MOUSE_DEFAULT_LAYER
 #    undef AUTO_MOUSE_DEFAULT_LAYER
@@ -40,4 +37,4 @@
 #define AUTO_MOUSE_DEFAULT_LAYER 4
 #define AUTO_MOUSE_TIME 650
 #define AUTO_MOUSE_DELAY 250
-#define AUTO_MOUSE_THRESHOLD 400
+#define AUTO_MOUSE_THRESHOLD 40

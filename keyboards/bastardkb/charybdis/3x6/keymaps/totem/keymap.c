@@ -3,10 +3,10 @@
 //
 // Totem layers/alphas kept; thumbs & pinkies reworked for HRM:
 //   - Home-row mods own Gui/Alt/Ctrl/Shift → thumbs are NOT mod-taps
-//   - Thumbs: NAV · Bspc · Ent | SYM · Spc
+//   - Thumbs: NAV · Bspc · Ent | SYM(Esc) · Spc
 //   - Left pinkies: Tab / ` / MOUSE
 //   - Right pinkies: \ / ' / MOUSE
-//   Combos: J+K → Esc, Z+X → Caps Word
+//   Combos: Z+X → Caps Word
 //   Auto-mouse ON with ~1 cm threshold; either bottom pinky also forces POINTER.
 //   Default DPI ~1000 (MX Ergo–ish); sniping is hold-only (no auto-snipe).
 
@@ -32,7 +32,7 @@ enum layers {
 #define HRM_SCLN RGUI_T(KC_SCLN)
 
 #define NAV MO(LAYER_NAV)
-#define SYM MO(LAYER_SYM)
+#define SYM LT(LAYER_SYM, KC_ESC)
 #define MSE MO(LAYER_POINTER)
 
 // clang-format off
@@ -74,11 +74,9 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 };
 // clang-format on
 
-const uint16_t PROGMEM combo_jk_esc[]  = {HRM_J, HRM_K, COMBO_END};
 const uint16_t PROGMEM combo_zx_caps[] = {KC_Z, KC_X, COMBO_END};
 
 combo_t key_combos[] = {
-    COMBO(combo_jk_esc, KC_ESC),
     COMBO(combo_zx_caps, QK_CAPS_WORD_TOGGLE),
 };
 
@@ -88,12 +86,33 @@ layer_state_t layer_state_set_user(layer_state_t state) {
 
 void pointing_device_init_user(void) {
     set_auto_mouse_layer(LAYER_POINTER);
-    set_auto_mouse_enable(true);
 }
 
+/*
+ * Drag-scroll vertical: module already applies invert_y flag.
+ * If traditional scroll (ball up = scroll up) is wanted:
+ * In pointing_device_task_bk_pointing_device:
+ *   scroll_buffer_y += (invert_y ? -1 : 1) * mouse_report.y;
+ *   v = scroll_buffer_y > 0 ? 1 : -1;
+ * When rolling ball UP: mouse_report.y < 0.
+ * Without invert: scroll_buffer_y becomes negative → v = -1 (down).
+ * So invert_y=true produces scroll_buffer_y > 0 → v = +1 (up/traditional)!
+ */
 void keyboard_post_init_user(void) {
-    /* Module floor is 400; bump virgin boards to ~MX Ergo default. */
-    if (bkpd_get_pointer_default_dpi() == bkpd_get_minimum_default_dpi()) {
-        bkpd_set_pointer_default_dpi(1000);
-    }
+    /* Module post_init disables auto-mouse unless this EEPROM flag is set. */
+    bkpd_set_auto_mouse_layer_enabled(true);
+    set_auto_mouse_enable(true);
+    bkpd_set_auto_precision_on_mouse_layer_enabled(false);
+
+    /* Invert Y so ball up (y<0) becomes positive scroll buffer → v=+1 (wheel up). */
+    bkpd_set_dragscroll_axis_invert_y(true);
+    bkpd_set_dragscroll_axis_invert_x(false);
+
+    /* Force ~800 DPI on the sensor. */
+    bkpd_set_pointer_default_dpi(800);
+    pointing_device_set_cpi(800);
+}
+
+report_mouse_t pointing_device_task_user(report_mouse_t mouse_report) {
+    return mouse_report;
 }
