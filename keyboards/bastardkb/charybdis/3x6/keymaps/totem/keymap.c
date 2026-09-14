@@ -11,6 +11,7 @@
 //   Default DPI ~1000 (MX Ergo–ish); sniping is hold-only (no auto-snipe).
 
 #include QMK_KEYBOARD_H
+#include "bk_pointing_device.h"
 
 enum layers {
     LAYER_BASE = 0,
@@ -88,4 +89,11 @@ layer_state_t layer_state_set_user(layer_state_t state) {
 void pointing_device_init_user(void) {
     set_auto_mouse_layer(LAYER_POINTER);
     set_auto_mouse_enable(true);
+}
+
+void keyboard_post_init_user(void) {
+    /* Module floor is 400; bump virgin boards to ~MX Ergo default. */
+    if (bkpd_get_pointer_default_dpi() == bkpd_get_minimum_default_dpi()) {
+        bkpd_set_pointer_default_dpi(1000);
+    }
 }

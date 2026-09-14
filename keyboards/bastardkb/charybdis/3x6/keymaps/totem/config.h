@@ -13,11 +13,20 @@
 #    define DYNAMIC_KEYMAP_LAYER_COUNT 5
 #endif
 
+/* Required by bastardkb/bk_pointing_device DPI LED indicator. */
+#ifdef LED_DPI_INDICATOR_INDEX
+#    undef LED_DPI_INDICATOR_INDEX
+#endif
+#define LED_DPI_INDICATOR_INDEX 0
+#ifdef RGBLIGHT_LED_COUNT
+#    undef RGBLIGHT_LED_COUNT
+#endif
+#define RGBLIGHT_LED_COUNT 41
+
 /*
- * Cursor speed: MX Ergo–ish default (~1000 DPI). Sniping stays manual
- * (hold SNIPING on POINTER); no auto-snipe on the pointer layer.
+ * Cursor speed: MX Ergo–ish (~1000 DPI) is set in keymap.c via
+ * bkpd_set_pointer_default_dpi(). Sniping stays hold-only (no auto-snipe).
  */
-#define CHARYBDIS_MINIMUM_DEFAULT_DPI 1000
 
 /*
  * Auto-mouse: ~1 cm of ball travel before POINTER activates.

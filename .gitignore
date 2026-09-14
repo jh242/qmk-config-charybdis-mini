@@ -10,3 +10,5 @@
 *.zip
 .cache/
 compile_commands.json
+
+_build/
