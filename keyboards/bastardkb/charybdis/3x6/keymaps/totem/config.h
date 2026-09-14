@@ -8,13 +8,12 @@
 #define CHORDAL_HOLD
 #define PERMISSIVE_HOLD
 
-/* Extra layers beyond VIA default (BASE/NAV/SYM/NUM/POINTER). */
 #ifdef VIA_ENABLE
 #    undef DYNAMIC_KEYMAP_LAYER_COUNT
 #    define DYNAMIC_KEYMAP_LAYER_COUNT 5
 #endif
 
-/* Voyager-style auto mouse → POINTER layer. */
+/* Voyager-style auto mouse → POINTER (layer 4). */
 #ifdef AUTO_MOUSE_DEFAULT_LAYER
 #    undef AUTO_MOUSE_DEFAULT_LAYER
 #endif
@@ -23,5 +22,4 @@
 #define AUTO_MOUSE_DELAY 250
 #define AUTO_MOUSE_THRESHOLD 10
 
-/* Precision DPI while on the pointer layer. */
 #define CHARYBDIS_AUTO_SNIPING_ON_LAYER 4
