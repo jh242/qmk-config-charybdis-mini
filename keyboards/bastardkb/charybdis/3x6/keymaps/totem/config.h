@@ -13,19 +13,28 @@
 #    define DYNAMIC_KEYMAP_LAYER_COUNT 5
 #endif
 
+/* Required by bastardkb/bk_pointing_device DPI LED indicator. */
+#ifdef LED_DPI_INDICATOR_INDEX
+#    undef LED_DPI_INDICATOR_INDEX
+#endif
+#define LED_DPI_INDICATOR_INDEX 0
+#ifdef RGBLIGHT_LED_COUNT
+#    undef RGBLIGHT_LED_COUNT
+#endif
+#define RGBLIGHT_LED_COUNT 41
+
 /*
- * Auto-mouse: ~1 cm of ball travel before POINTER activates.
- *
- * AUTO_MOUSE_THRESHOLD is raw sensor counts (accumulated). At Charybdis
- * default 400 DPI: 400 counts/inch ≈ 157 counts/cm. Round up a bit so a
- * resting palm doesn't trip it; intentional flicks still will.
+ * Cursor speed: ~800 DPI (set in keymap.c). Sniping stays hold-only.
+ */
+
+/*
+ * Auto-mouse: layer 3 is the BastardKB / Argos mouse layer.
+ * Accumulated report motion (QMK default is 10).
  */
 #ifdef AUTO_MOUSE_DEFAULT_LAYER
 #    undef AUTO_MOUSE_DEFAULT_LAYER
 #endif
-#define AUTO_MOUSE_DEFAULT_LAYER 4
+#define AUTO_MOUSE_DEFAULT_LAYER 3
 #define AUTO_MOUSE_TIME 650
 #define AUTO_MOUSE_DELAY 250
-#define AUTO_MOUSE_THRESHOLD 160
-
-#define CHARYBDIS_AUTO_SNIPING_ON_LAYER 4
+#define AUTO_MOUSE_THRESHOLD 40

@@ -10,19 +10,19 @@ rewritten for home-row mods.
 |-------|-----|-------|
 | **BASE** | default | Home-row mods: `A` Gui · `S` Alt · `D` Ctrl · `F` Shift / `J` Shift · `K` Ctrl · `L` Alt · `;` Gui |
 | **NAV** | hold left-outer thumb | Numbers left, vim arrows + Home/End/Pg right |
-| **SYM** | hold right-inner thumb | Symbols / brackets |
+| **SYM** | hold right-inner thumb (tap: Esc) | Symbols / brackets |
 | **NUM** | NAV + SYM together | F-keys + numpad |
-| **POINTER** | hold bottom-left pinky, or ~1 cm ball move | Mouse buttons, DPI, sniping, drag-scroll |
+| **POINTER** | hold bottom-left pinky, or ~1 cm ball move | Mouse buttons, DPI, optional sniping, drag-scroll |
 
-**Thumbs** (no mod-taps):
+**Thumbs**:
 
-`NAV` · `Bspc` · `Enter` | `SYM` · `Space`
+`NAV` · `Bspc` · `Enter` | `SYM(Esc)` · `Space`
 
 **Pinky outers:** `Tab` `` ` `` `MOUSE` / `'` `\` `-`
 
-**Combos:** `J`+`K` → Esc · `Z`+`X` → Caps Word
+**Combos:** `Z`+`X` → Caps Word
 
-**Trackball:** auto-mouse on with `AUTO_MOUSE_THRESHOLD 160` (~1 cm at 400 DPI). Bottom-left pinky still forces POINTER.
+**Trackball:** default ~1000 DPI (MX Ergo–ish). Auto-mouse on with `AUTO_MOUSE_THRESHOLD 400` (~1 cm). Sniping is hold-to-enable only (no auto-snipe). Bottom-left pinky still forces POINTER.
 
 ## Build
 
