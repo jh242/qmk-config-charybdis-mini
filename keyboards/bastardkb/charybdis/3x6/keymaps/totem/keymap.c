@@ -7,18 +7,22 @@
 //   - Left pinkies: Tab / ` / MOUSE
 //   - Right pinkies: \ / ' / MOUSE
 //   Combos: Z+X → Caps Word
-//   Auto-mouse ON with ~1 cm threshold; either bottom pinky also forces POINTER.
-//   Default DPI ~1000 (MX Ergo–ish); sniping is hold-only (no auto-snipe).
+//   Auto-mouse ON (layer 3 = POINTER); either bottom pinky also forces POINTER.
+//   Default DPI ~800; sniping is hold-only (no auto-snipe).
 
 #include QMK_KEYBOARD_H
 #include "bk_pointing_device.h"
+#ifdef COMMUNITY_MODULE_ARGOS_ENABLE
+#include "argos.h"
+#include "argos_combo.h"
+#endif
 
 enum layers {
     LAYER_BASE = 0,
     LAYER_NAV,
     LAYER_SYM,
-    LAYER_NUM,
     LAYER_POINTER,
+    LAYER_NUM,
 };
 
 /* Home-row mods — Totem: GUI ALT CTL SFT / SFT CTL ALT GUI */
@@ -58,18 +62,18 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
                                   _______, _______, _______,     _______, _______
   ),
 
-  [LAYER_NUM] = LAYOUT(
-       _______, KC_F1,   KC_F2,   KC_F3,   KC_F4,   KC_F5,       KC_PAST, KC_7,    KC_8,    KC_9,    KC_PMNS, _______,
-       _______, RM_TOGG, RM_NEXT, RM_PREV, RM_HUEU, RM_SATU,     KC_PSLS, KC_4,    KC_5,    KC_6,    KC_PPLS, _______,
-       QK_BOOT, EE_CLR,  _______, _______, KC_F11,  KC_F12,      KC_0,    KC_1,    KC_2,    KC_3,    KC_DOT,  KC_BSPC,
-                                  _______, _______, _______,     _______, _______
-  ),
-
   [LAYER_POINTER] = LAYOUT(
        QK_BOOT, EE_CLR,  _______, _______, DPI_MOD, S_D_MOD,     S_D_MOD, DPI_MOD, _______, _______, EE_CLR,  QK_BOOT,
        _______, KC_LGUI, KC_LALT, KC_LCTL, KC_LSFT, _______,     _______, KC_RSFT, KC_RCTL, KC_RALT, KC_RGUI, _______,
        _______, _______, DRGSCRL, SNIPING, _______, _______,     _______, _______, SNIPING, DRGSCRL, _______, _______,
                                   MS_BTN2, MS_BTN1, MS_BTN3,     MS_BTN1, MS_BTN2
+  ),
+
+  [LAYER_NUM] = LAYOUT(
+       _______, KC_F1,   KC_F2,   KC_F3,   KC_F4,   KC_F5,       KC_PAST, KC_7,    KC_8,    KC_9,    KC_PMNS, _______,
+       _______, RM_TOGG, RM_NEXT, RM_PREV, RM_HUEU, RM_SATU,     KC_PSLS, KC_4,    KC_5,    KC_6,    KC_PPLS, _______,
+       QK_BOOT, EE_CLR,  _______, _______, KC_F11,  KC_F12,      KC_0,    KC_1,    KC_2,    KC_3,    KC_DOT,  KC_BSPC,
+                                  _______, _______, _______,     _______, _______
   ),
 };
 // clang-format on
@@ -99,6 +103,10 @@ void pointing_device_init_user(void) {
  * So invert_y=true produces scroll_buffer_y > 0 → v = +1 (up/traditional)!
  */
 void keyboard_post_init_user(void) {
+#ifdef COMMUNITY_MODULE_ARGOS_ENABLE
+    argos_combos_copy_from_QMK();
+    argos_combos_load_from_eeprom();
+#endif
     /* Module post_init disables auto-mouse unless this EEPROM flag is set. */
     bkpd_set_auto_mouse_layer_enabled(true);
     set_auto_mouse_enable(true);

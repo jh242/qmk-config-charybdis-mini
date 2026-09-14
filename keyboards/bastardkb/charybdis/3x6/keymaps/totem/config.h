@@ -28,13 +28,13 @@
  */
 
 /*
- * Auto-mouse: ~1 cm of ball travel before POINTER activates.
+ * Auto-mouse: layer 3 is the BastardKB / Argos mouse layer.
  * Accumulated report motion (QMK default is 10).
  */
 #ifdef AUTO_MOUSE_DEFAULT_LAYER
 #    undef AUTO_MOUSE_DEFAULT_LAYER
 #endif
-#define AUTO_MOUSE_DEFAULT_LAYER 4
+#define AUTO_MOUSE_DEFAULT_LAYER 3
 #define AUTO_MOUSE_TIME 650
 #define AUTO_MOUSE_DELAY 250
 #define AUTO_MOUSE_THRESHOLD 40
