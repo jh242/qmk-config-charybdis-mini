@@ -13,5 +13,19 @@
 #    define DYNAMIC_KEYMAP_LAYER_COUNT 5
 #endif
 
-/* Auto-mouse disabled in keymap (palm on ball). Keep sniping when POINTER is held. */
+/*
+ * Auto-mouse: ~1 cm of ball travel before POINTER activates.
+ *
+ * AUTO_MOUSE_THRESHOLD is raw sensor counts (accumulated). At Charybdis
+ * default 400 DPI: 400 counts/inch ≈ 157 counts/cm. Round up a bit so a
+ * resting palm doesn't trip it; intentional flicks still will.
+ */
+#ifdef AUTO_MOUSE_DEFAULT_LAYER
+#    undef AUTO_MOUSE_DEFAULT_LAYER
+#endif
+#define AUTO_MOUSE_DEFAULT_LAYER 4
+#define AUTO_MOUSE_TIME 650
+#define AUTO_MOUSE_DELAY 250
+#define AUTO_MOUSE_THRESHOLD 160
+
 #define CHARYBDIS_AUTO_SNIPING_ON_LAYER 4

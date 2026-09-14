@@ -7,7 +7,7 @@
 //   - Left pinkies: Tab / ` / MOUSE (hold for POINTER)
 //   - Right pinkies: ' / \ / -
 //   Combos: J+K → Esc, Z+X → Caps Word
-//   Auto-mouse OFF — palm rests on the ball while typing; use MOUSE pinky.
+//   Auto-mouse ON with ~1 cm threshold (palm rest); MOUSE pinky still works.
 
 #include QMK_KEYBOARD_H
 
@@ -85,6 +85,6 @@ layer_state_t layer_state_set_user(layer_state_t state) {
 }
 
 void pointing_device_init_user(void) {
-    // Palm rests on the ball while typing — do not auto-enter POINTER.
-    set_auto_mouse_enable(false);
+    set_auto_mouse_layer(LAYER_POINTER);
+    set_auto_mouse_enable(true);
 }

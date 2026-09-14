@@ -12,7 +12,7 @@ rewritten for home-row mods.
 | **NAV** | hold left-outer thumb | Numbers left, vim arrows + Home/End/Pg right |
 | **SYM** | hold right-inner thumb | Symbols / brackets |
 | **NUM** | NAV + SYM together | F-keys + numpad |
-| **POINTER** | hold bottom-left pinky | Mouse buttons, DPI, sniping, drag-scroll |
+| **POINTER** | hold bottom-left pinky, or ~1 cm ball move | Mouse buttons, DPI, sniping, drag-scroll |
 
 **Thumbs** (no mod-taps):
 
@@ -22,7 +22,7 @@ rewritten for home-row mods.
 
 **Combos:** `J`+`K` → Esc · `Z`+`X` → Caps Word
 
-**Trackball:** auto-mouse is **off** (palm rests on the ball). Hold the bottom-left pinky for POINTER.
+**Trackball:** auto-mouse on with `AUTO_MOUSE_THRESHOLD 160` (~1 cm at 400 DPI). Bottom-left pinky still forces POINTER.
 
 ## Build
 
