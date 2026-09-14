@@ -4,10 +4,10 @@
 // Totem layers/alphas kept; thumbs & pinkies reworked for HRM:
 //   - Home-row mods own Gui/Alt/Ctrl/Shift → thumbs are NOT mod-taps
 //   - Thumbs: NAV · Bspc · Ent | SYM · Spc
-//   - Left pinkies: Tab / ` / MOUSE (hold for POINTER)
-//   - Right pinkies: ' / \ / -
+//   - Left pinkies: Tab / ` / MOUSE
+//   - Right pinkies: \ / ' / MOUSE
 //   Combos: J+K → Esc, Z+X → Caps Word
-//   Auto-mouse ON with ~1 cm threshold (palm rest); MOUSE pinky still works.
+//   Auto-mouse ON with ~1 cm threshold; either bottom pinky also forces POINTER.
 
 #include QMK_KEYBOARD_H
 
@@ -36,15 +36,15 @@ enum layers {
 // clang-format off
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   [LAYER_BASE] = LAYOUT(
-       KC_TAB,  KC_Q,    KC_W,    KC_E,    KC_R,    KC_T,        KC_Y,    KC_U,    KC_I,    KC_O,    KC_P,    KC_QUOT,
-       KC_GRV,  HRM_A,   HRM_S,   HRM_D,   HRM_F,   KC_G,        KC_H,    HRM_J,   HRM_K,   HRM_L,   HRM_SCLN,KC_BSLS,
-       MSE,     KC_Z,    KC_X,    KC_C,    KC_V,    KC_B,        KC_N,    KC_M,    KC_COMM, KC_DOT,  KC_SLSH, KC_MINS,
+       KC_TAB,  KC_Q,    KC_W,    KC_E,    KC_R,    KC_T,        KC_Y,    KC_U,    KC_I,    KC_O,    KC_P,    KC_BSLS,
+       KC_GRV,  HRM_A,   HRM_S,   HRM_D,   HRM_F,   KC_G,        KC_H,    HRM_J,   HRM_K,   HRM_L,   HRM_SCLN,KC_QUOT,
+       MSE,     KC_Z,    KC_X,    KC_C,    KC_V,    KC_B,        KC_N,    KC_M,    KC_COMM, KC_DOT,  KC_SLSH, MSE,
                                   NAV,     KC_BSPC, KC_ENT,      SYM,     KC_SPC
   ),
 
   [LAYER_NAV] = LAYOUT(
        _______, KC_1,    KC_2,    KC_3,    KC_4,    KC_5,        KC_6,    KC_7,    KC_8,    KC_9,    KC_0,    KC_DEL,
-       _______, _______, _______, _______, _______, _______,     KC_LEFT, KC_DOWN, KC_UP,   KC_RGHT, KC_QUOT, _______,
+       _______, _______, _______, _______, _______, _______,     KC_LEFT, KC_DOWN, KC_UP,   KC_RGHT, _______, _______,
        _______, _______, _______,C(KC_BSPC),_______, _______,    KC_HOME, KC_PGDN, KC_PGUP, KC_END,  KC_GRV,  _______,
                                   _______, _______, _______,     _______, _______
   ),
@@ -52,7 +52,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   [LAYER_SYM] = LAYOUT(
        _______, KC_EXLM, KC_AT,   KC_HASH, KC_DLR,  KC_PERC,     KC_CIRC, KC_AMPR, KC_ASTR, KC_LPRN, KC_RPRN, _______,
        _______, KC_LBRC, KC_RBRC, KC_LPRN, KC_RPRN, KC_TILD,     KC_MINS, KC_EQL,  KC_LCBR, KC_RCBR, KC_PIPE, _______,
-       _______, KC_LCBR, KC_RCBR, KC_LT,   KC_GT,   _______,     KC_UNDS, KC_PLUS, _______, _______, KC_BSLS, KC_GRV,
+       _______, KC_LCBR, KC_RCBR, KC_LT,   KC_GT,   _______,     KC_UNDS, KC_PLUS, _______, _______, _______, KC_GRV,
                                   _______, _______, _______,     _______, _______
   ),
 
