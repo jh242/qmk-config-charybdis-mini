@@ -1,12 +1,12 @@
 // Copyright 2026 Jack Hu (@jh242)
 // Port of jh242/zmk-config-totem (Totem) to BastardKB Charybdis Mini 3x6.
 //
-// Totem (ZMK) → QMK:
-//   BASE / NAV / SYM / NUM tri-layer, home-row mods, thumb LT(NAV/SYM)
+// Totem layers/alphas kept; thumbs & pinkies reworked for HRM:
+//   - Home-row mods own Gui/Alt/Ctrl/Shift → thumbs are NOT mod-taps
+//   - Thumbs: Bspc · NAV · Ent | Spc · SYM  (layers = MO, zero tap latency)
+//   - Pinky outers: Esc/`/Tab and '/\/- (Bspc vacated the bottom-right)
 //   Combos: J+K → Esc, Z+X → Caps Word
-// Extra on Mini:
-//   Outer columns (Totem is 5-wide + Tab/Bspc), 5 thumbs (ball eats one)
-//   POINTER layer via QMK auto-mouse (Voyager-style trackball trigger)
+//   POINTER via QMK auto-mouse (Voyager-style trackball trigger)
 
 #include QMK_KEYBOARD_H
 
@@ -18,7 +18,7 @@ enum layers {
     LAYER_POINTER,
 };
 
-/* Home-row mods — same as Totem: GUI ALT CTL SFT / SFT CTL ALT GUI */
+/* Home-row mods — Totem: GUI ALT CTL SFT / SFT CTL ALT GUI */
 #define HRM_A    LGUI_T(KC_A)
 #define HRM_S    LALT_T(KC_S)
 #define HRM_D    LCTL_T(KC_D)
@@ -28,17 +28,16 @@ enum layers {
 #define HRM_L    RALT_T(KC_L)
 #define HRM_SCLN RGUI_T(KC_SCLN)
 
-#define NAV_CTL LT(LAYER_NAV, KC_LCTL)
-#define SYM_ESC LT(LAYER_SYM, KC_ESC)
-#define TAB_SFT LSFT_T(KC_TAB)
+#define NAV MO(LAYER_NAV)
+#define SYM MO(LAYER_SYM)
 
 // clang-format off
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   [LAYER_BASE] = LAYOUT(
-       KC_ESC,  KC_Q,    KC_W,    KC_E,    KC_R,    KC_T,        KC_Y,    KC_U,    KC_I,    KC_O,    KC_P,    KC_DEL,
-       KC_GRV,  HRM_A,   HRM_S,   HRM_D,   HRM_F,   KC_G,        KC_H,    HRM_J,   HRM_K,   HRM_L,   HRM_SCLN,KC_LGUI,
-       TAB_SFT, KC_Z,    KC_X,    KC_C,    KC_V,    KC_B,        KC_N,    KC_M,    KC_COMM, KC_DOT,  KC_SLSH, KC_BSPC,
-                                  KC_LALT, NAV_CTL, KC_ENT,      KC_SPC,  SYM_ESC
+       KC_ESC,  KC_Q,    KC_W,    KC_E,    KC_R,    KC_T,        KC_Y,    KC_U,    KC_I,    KC_O,    KC_P,    KC_QUOT,
+       KC_GRV,  HRM_A,   HRM_S,   HRM_D,   HRM_F,   KC_G,        KC_H,    HRM_J,   HRM_K,   HRM_L,   HRM_SCLN,KC_BSLS,
+       KC_TAB,  KC_Z,    KC_X,    KC_C,    KC_V,    KC_B,        KC_N,    KC_M,    KC_COMM, KC_DOT,  KC_SLSH, KC_MINS,
+                                  KC_BSPC, NAV,     KC_ENT,      KC_SPC,  SYM
   ),
 
   [LAYER_NAV] = LAYOUT(
