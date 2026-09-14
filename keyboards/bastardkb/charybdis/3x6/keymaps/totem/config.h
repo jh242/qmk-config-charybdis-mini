@@ -14,11 +14,16 @@
 #endif
 
 /*
+ * Cursor speed: MX Ergo–ish default (~1000 DPI). Sniping stays manual
+ * (hold SNIPING on POINTER); no auto-snipe on the pointer layer.
+ */
+#define CHARYBDIS_MINIMUM_DEFAULT_DPI 1000
+
+/*
  * Auto-mouse: ~1 cm of ball travel before POINTER activates.
  *
- * AUTO_MOUSE_THRESHOLD is raw sensor counts (accumulated). At Charybdis
- * default 400 DPI: 400 counts/inch ≈ 157 counts/cm. Round up a bit so a
- * resting palm doesn't trip it; intentional flicks still will.
+ * AUTO_MOUSE_THRESHOLD is accumulated report motion. At 1000 DPI:
+ * 1000 counts/inch ≈ 394 counts/cm → 400 ≈ 1 cm.
  */
 #ifdef AUTO_MOUSE_DEFAULT_LAYER
 #    undef AUTO_MOUSE_DEFAULT_LAYER
@@ -26,6 +31,4 @@
 #define AUTO_MOUSE_DEFAULT_LAYER 4
 #define AUTO_MOUSE_TIME 650
 #define AUTO_MOUSE_DELAY 250
-#define AUTO_MOUSE_THRESHOLD 160
-
-#define CHARYBDIS_AUTO_SNIPING_ON_LAYER 4
+#define AUTO_MOUSE_THRESHOLD 400

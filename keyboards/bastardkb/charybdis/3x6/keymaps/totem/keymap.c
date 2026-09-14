@@ -8,6 +8,7 @@
 //   - Right pinkies: \ / ' / MOUSE
 //   Combos: J+K → Esc, Z+X → Caps Word
 //   Auto-mouse ON with ~1 cm threshold; either bottom pinky also forces POINTER.
+//   Default DPI ~1000 (MX Ergo–ish); sniping is hold-only (no auto-snipe).
 
 #include QMK_KEYBOARD_H
 
