@@ -1,0 +1,12 @@
+.build/
+*.hex
+*.bin
+*.uf2
+*.elf
+*.map
+*.o
+*.d
+*.a
+*.zip
+.cache/
+compile_commands.json
