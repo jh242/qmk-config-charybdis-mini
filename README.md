@@ -10,17 +10,17 @@ rewritten for home-row mods.
 |-------|-----|-------|
 | **BASE** | default | Home-row mods: `A` Gui · `S` Alt · `D` Ctrl · `F` Shift / `J` Shift · `K` Ctrl · `L` Alt · `;` Gui |
 | **NAV** | hold left-outer thumb | Numbers left, vim arrows + Home/End/Pg right |
-| **SYM** | hold right-inner thumb (tap: Esc) | Symbols / brackets, `?` on `B` |
+| **SYM** | hold right-inner thumb | Symbols / brackets, `?` on `B` |
 | **NUM** | NAV + SYM together | F-keys + numpad |
 | **POINTER** | hold bottom-right pinky, or move the ball | Mouse buttons, DPI, sniping, plain mods on the home row |
 
 **Thumbs**:
 
-`NAV` · `Bspc` · `Enter` | `SYM(Esc)` · `Space`
+`NAV` · `Bspc` · `Enter` | `SYM` · `Space` (layer keys are plain `MO()`, no tap action)
 
 **Pinky outers:** `Tab` `` ` `` `SCROLL` / `\` `'` `MOUSE`
 
-**Combos:** `Z`+`X` → Caps Word
+**Combos:** `J`+`K` → Esc · `Z`+`X` → Caps Word (both keys within the combo term, 50 ms by default)
 
 **Trackball:** default 800 DPI. Auto-mouse on with `AUTO_MOUSE_THRESHOLD 40`; only ball motion activates or keeps POINTER alive (mouse-key releases get a 300 ms grace for double-clicks). Sniping is hold-to-enable only (no auto-snipe). Bottom-right pinky still forces POINTER.
 

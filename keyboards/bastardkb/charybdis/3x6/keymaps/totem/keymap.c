@@ -3,10 +3,10 @@
 //
 // Totem layers/alphas kept; thumbs & pinkies reworked for HRM:
 //   - Home-row mods own Gui/Alt/Ctrl/Shift → thumbs are NOT mod-taps
-//   - Thumbs: NAV · Bspc · Ent | SYM(Esc) · Spc
+//   - Thumbs: NAV · Bspc · Ent | SYM · Spc
 //   - Left pinkies: Tab / ` / SCROLL (hold: ball scrolls, any layer)
 //   - Right pinkies: \ / ' / MOUSE
-//   Combos: Z+X → Caps Word
+//   Combos: J+K → Esc, Z+X → Caps Word
 //   Auto-mouse ON (layer 3 = POINTER); right bottom pinky also forces POINTER.
 //   Default DPI ~800; sniping is hold-only (no auto-snipe).
 
@@ -36,7 +36,7 @@ enum layers {
 #define HRM_SCLN RGUI_T(KC_SCLN)
 
 #define NAV MO(LAYER_NAV)
-#define SYM LT(LAYER_SYM, KC_ESC)
+#define SYM MO(LAYER_SYM)
 #define MSE MO(LAYER_POINTER)
 
 enum custom_keycodes { SCRL = SAFE_RANGE };
@@ -80,9 +80,11 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 };
 // clang-format on
 
+const uint16_t PROGMEM combo_jk_esc[]  = {HRM_J, HRM_K, COMBO_END};
 const uint16_t PROGMEM combo_zx_caps[] = {KC_Z, KC_X, COMBO_END};
 
 combo_t key_combos[] = {
+    COMBO(combo_jk_esc, KC_ESC),
     COMBO(combo_zx_caps, QK_CAPS_WORD_TOGGLE),
 };
 
