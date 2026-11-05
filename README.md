@@ -10,22 +10,31 @@ rewritten for home-row mods.
 |-------|-----|-------|
 | **BASE** | default | Home-row mods: `A` Gui · `S` Alt · `D` Ctrl · `F` Shift / `J` Shift · `K` Ctrl · `L` Alt · `;` Gui |
 | **NAV** | hold left-outer thumb | Numbers left, vim arrows + Home/End/Pg right |
-| **SYM** | hold right-inner thumb | Symbols / brackets |
+| **SYM** | hold right-inner thumb | Symbols / brackets, `?` on `B` |
 | **NUM** | NAV + SYM together | F-keys + numpad |
-| **POINTER** | hold bottom-left pinky, or ~1 cm ball move | Mouse buttons, DPI, sniping, drag-scroll |
+| **POINTER** | hold bottom-right pinky, or move the ball | Mouse buttons, DPI, sniping, plain mods on the home row |
 
-**Thumbs** (no mod-taps):
+**Thumbs**:
 
-`NAV` · `Bspc` · `Enter` | `SYM` · `Space`
+`NAV` · `Bspc` · `Enter` | `SYM` · `Space` (layer keys are plain `MO()`, no tap action)
 
-**Pinky outers:** `Tab` `` ` `` `MOUSE` / `'` `\` `-`
+**Pinky outers:** `Tab` `` ` `` `SCROLL` / `\` `'` `MOUSE`
 
-**Combos:** `J`+`K` → Esc · `Z`+`X` → Caps Word
+**Combos:** `J`+`K` → Esc · `Z`+`X` → Caps Word (both keys within the combo term, 50 ms by default)
 
-**Trackball:** auto-mouse on with `AUTO_MOUSE_THRESHOLD 160` (~1 cm at 400 DPI). Bottom-left pinky still forces POINTER.
+**Trackball:** default 800 DPI. Auto-mouse on with `AUTO_MOUSE_THRESHOLD 40`; only ball motion activates or keeps POINTER alive (mouse-key releases get a 300 ms grace for double-clicks). Sniping is hold-to-enable only (no auto-snipe). Bottom-right pinky still forces POINTER.
+
+**Scroll:** hold bottom-left pinky (`SCROLL`, any layer) and roll the ball. One axis at a time, ball up = scroll up, `SCROLL_DIVISOR 32` counts per wheel tick (~1 mm at 800 DPI). Scrolling never wakes POINTER.
+
+**Paste after mouse use:** for 1 s after ball motion or a mouse-button release (or while POINTER is on), `K`(Ctrl) + `Z`/`X`/`C`/`V` resolves as Ctrl as soon as the second key goes down; any other key taps `k` immediately.
+
+**Home-row Shift:** `F`/`J` are exempt from Flow Tap so fast `Shift`+`/` gives `?`.
 
 ## Build
 
+Uses the BastardKB [`qmk_modules`](https://github.com/Bastardkb/qmk_modules) submodule (`bk_pointing_device`, `argos`) against [`bastardkb/bastardkb-qmk`](https://github.com/bastardkb/bastardkb-qmk) `main`.
+
 ```bash
+git submodule update --init
 qmk compile -c -kb bastardkb/charybdis/3x6/splinktegrated_rev1 -km totem
 ```
