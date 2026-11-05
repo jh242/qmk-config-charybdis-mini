@@ -4,10 +4,10 @@
 // Totem layers/alphas kept; thumbs & pinkies reworked for HRM:
 //   - Home-row mods own Gui/Alt/Ctrl/Shift → thumbs are NOT mod-taps
 //   - Thumbs: NAV · Bspc · Ent | SYM(Esc) · Spc
-//   - Left pinkies: Tab / ` / MOUSE
+//   - Left pinkies: Tab / ` / SCROLL (hold: ball scrolls, any layer)
 //   - Right pinkies: \ / ' / MOUSE
 //   Combos: Z+X → Caps Word
-//   Auto-mouse ON (layer 3 = POINTER); either bottom pinky also forces POINTER.
+//   Auto-mouse ON (layer 3 = POINTER); right bottom pinky also forces POINTER.
 //   Default DPI ~800; sniping is hold-only (no auto-snipe).
 
 #include QMK_KEYBOARD_H
@@ -39,12 +39,14 @@ enum layers {
 #define SYM LT(LAYER_SYM, KC_ESC)
 #define MSE MO(LAYER_POINTER)
 
+enum custom_keycodes { SCRL = SAFE_RANGE };
+
 // clang-format off
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   [LAYER_BASE] = LAYOUT(
        KC_TAB,  KC_Q,    KC_W,    KC_E,    KC_R,    KC_T,        KC_Y,    KC_U,    KC_I,    KC_O,    KC_P,    KC_BSLS,
        KC_GRV,  HRM_A,   HRM_S,   HRM_D,   HRM_F,   KC_G,        KC_H,    HRM_J,   HRM_K,   HRM_L,   HRM_SCLN,KC_QUOT,
-       MSE,     KC_Z,    KC_X,    KC_C,    KC_V,    KC_B,        KC_N,    KC_M,    KC_COMM, KC_DOT,  KC_SLSH, MSE,
+       SCRL,    KC_Z,    KC_X,    KC_C,    KC_V,    KC_B,        KC_N,    KC_M,    KC_COMM, KC_DOT,  KC_SLSH, MSE,
                                   NAV,     KC_BSPC, KC_ENT,      SYM,     KC_SPC
   ),
 
@@ -65,7 +67,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   [LAYER_POINTER] = LAYOUT(
        QK_BOOT, EE_CLR,  _______, _______, DPI_MOD, S_D_MOD,     S_D_MOD, DPI_MOD, _______, _______, EE_CLR,  QK_BOOT,
        _______, KC_LGUI, KC_LALT, KC_LCTL, KC_LSFT, _______,     _______, KC_RSFT, KC_RCTL, KC_RALT, KC_RGUI, _______,
-       _______, _______, DRGSCRL, SNIPING, _______, _______,     _______, _______, SNIPING, DRGSCRL, _______, _______,
+       _______, _______, _______, SNIPING, _______, _______,     _______, _______, SNIPING, _______, _______, _______,
                                   MS_BTN2, MS_BTN1, MS_BTN3,     MS_BTN1, MS_BTN2
   ),
 
@@ -146,20 +148,51 @@ void keyboard_post_init_user(void) {
     pointing_device_set_cpi(800);
 }
 
+#define SCROLL_DIVISOR 32
+
+static bool    scroll_hold;
+static int16_t scroll_acc_x, scroll_acc_y;
+
+// SCRL held: ball scrolls on the dominant axis only, carrying the remainder.
+// Runs twice per report (module + kb); the second pass sees x/y already zeroed.
 report_mouse_t pointing_device_task_user(report_mouse_t mouse_report) {
+    if (!scroll_hold || (!mouse_report.x && !mouse_report.y)) {
+        return mouse_report;
+    }
+    scroll_acc_x += mouse_report.x;
+    scroll_acc_y += mouse_report.y;
+    mouse_report.x = mouse_report.y = 0;
+    if (abs(scroll_acc_y) >= abs(scroll_acc_x)) {
+        scroll_acc_x   = 0;
+        mouse_report.v = -(scroll_acc_y / SCROLL_DIVISOR);
+        scroll_acc_y %= SCROLL_DIVISOR;
+    } else {
+        scroll_acc_y   = 0;
+        mouse_report.h = scroll_acc_x / SCROLL_DIVISOR;
+        scroll_acc_x %= SCROLL_DIVISOR;
+    }
     return mouse_report;
 }
 
 #ifdef POINTING_DEVICE_AUTO_MOUSE_ENABLE
 #    define MOUSE_KEY_RELEASE_GRACE_MS 300
+#    define MOUSE_SHORTCUT_WINDOW_MS 1000
 
 static uint16_t last_motion_timer;
 static uint16_t last_mouse_key_release_timer;
+static uint32_t last_mouse_activity_timer;
 static int16_t  motion_acc_x, motion_acc_y;
 
 // Only ball motion activates/refreshes; once on, any motion counts as keep-alive.
+// Scrolling never activates POINTER.
 bool auto_mouse_activation(report_mouse_t report) {
     bool moved = report.x || report.y || report.h || report.v;
+    if (moved) {
+        last_mouse_activity_timer = timer_read32();
+    }
+    if (scroll_hold) {
+        return false;
+    }
     if (moved && layer_state_is(LAYER_POINTER)) {
         last_motion_timer = timer_read();
         return true;
@@ -180,10 +213,40 @@ bool auto_mouse_activation(report_mouse_t report) {
 }
 
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {
+    if (keycode == SCRL) {
+        scroll_hold  = record->event.pressed;
+        scroll_acc_x = scroll_acc_y = 0;
+        return false;
+    }
     if (!record->event.pressed && layer_state_is(LAYER_POINTER) && IS_MOUSEKEY(keycode)) {
         last_mouse_key_release_timer = timer_read();
+        last_mouse_activity_timer    = timer_read32();
     }
     return true;
+}
+
+static bool mouse_recently_used(void) {
+    return layer_state_is(LAYER_POINTER) || timer_elapsed32(last_mouse_activity_timer) < MOUSE_SHORTCUT_WINDOW_MS;
+}
+
+// Right after mouse use, K (Ctrl) + Z/X/C/V settles as Ctrl on the V press, so a
+// rolled paste can't come out as "kv". Any other key in that window taps K at once.
+bool get_hold_on_other_key_press(uint16_t keycode, keyrecord_t *record) {
+    return keycode == HRM_K && mouse_recently_used();
+}
+
+bool get_chordal_hold(uint16_t tap_hold_keycode, keyrecord_t *tap_hold_record, uint16_t other_keycode, keyrecord_t *other_record) {
+    if (tap_hold_keycode == HRM_K && mouse_recently_used()) {
+        switch (other_keycode) {
+            case KC_Z:
+            case KC_X:
+            case KC_C:
+            case KC_V:
+                return true;
+        }
+        return false;
+    }
+    return get_chordal_hold_default(tap_hold_record, other_record);
 }
 
 // QMK restarts the timeout on every mouse-key release; cap that to a short grace.
