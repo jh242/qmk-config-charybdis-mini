@@ -10,7 +10,7 @@ rewritten for home-row mods.
 |-------|-----|-------|
 | **BASE** | default | Home-row mods: `A` Gui · `S` Alt · `D` Ctrl · `F` Shift / `J` Shift · `K` Ctrl · `L` Alt · `;` Gui |
 | **NAV** | hold left-outer thumb | Numbers left, vim arrows + Home/End/Pg right |
-| **SYM** | hold right-inner thumb (tap: Esc) | Symbols / brackets |
+| **SYM** | hold right-inner thumb (tap: Esc) | Symbols / brackets, `?` on `B` |
 | **NUM** | NAV + SYM together | F-keys + numpad |
 | **POINTER** | hold bottom-left pinky, or ~1 cm ball move | Mouse buttons, DPI, optional sniping, drag-scroll |
 
@@ -22,10 +22,15 @@ rewritten for home-row mods.
 
 **Combos:** `Z`+`X` → Caps Word
 
-**Trackball:** default ~1000 DPI (MX Ergo–ish). Auto-mouse on with `AUTO_MOUSE_THRESHOLD 400` (~1 cm). Sniping is hold-to-enable only (no auto-snipe). Bottom-left pinky still forces POINTER.
+**Trackball:** default 800 DPI. Auto-mouse on with `AUTO_MOUSE_THRESHOLD 40`; only ball motion activates or keeps POINTER alive (mouse-key releases get a 300 ms grace for double-clicks). Sniping is hold-to-enable only (no auto-snipe). Either bottom pinky still forces POINTER.
+
+**Home-row Shift:** `F`/`J` are exempt from Flow Tap so fast `Shift`+`/` gives `?`.
 
 ## Build
 
+Uses the BastardKB [`qmk_modules`](https://github.com/Bastardkb/qmk_modules) submodule (`bk_pointing_device`, `argos`) against [`bastardkb/bastardkb-qmk`](https://github.com/bastardkb/bastardkb-qmk) `main`.
+
 ```bash
+git submodule update --init
 qmk compile -c -kb bastardkb/charybdis/3x6/splinktegrated_rev1 -km totem
 ```

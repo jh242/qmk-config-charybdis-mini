@@ -85,16 +85,27 @@ combo_t key_combos[] = {
 };
 
 // Shift HRMs are exempt so a fast "t" → Shift+/ still yields "?" instead of "f/".
-uint16_t get_flow_tap_term(uint16_t keycode, keyrecord_t *record, uint16_t prev_keycode) {
+// Argos owns get_flow_tap_term(), so the exemption lives here; it also skips
+// Flow Tap for the key right after a tapped F/J.
+bool is_flow_tap_key(uint16_t keycode) {
+    if ((get_mods() & (MOD_MASK_CG | MOD_BIT_LALT)) != 0) {
+        return false;
+    }
     switch (keycode) {
         case HRM_F:
         case HRM_J:
-            return 0;
+            return false;
     }
-    if (is_flow_tap_key(keycode) && is_flow_tap_key(prev_keycode)) {
-        return FLOW_TAP_TERM;
+    switch (get_tap_keycode(keycode)) {
+        case KC_SPC:
+        case KC_A ... KC_Z:
+        case KC_DOT:
+        case KC_COMM:
+        case KC_SCLN:
+        case KC_SLSH:
+            return true;
     }
-    return 0;
+    return false;
 }
 
 layer_state_t layer_state_set_user(layer_state_t state) {
@@ -125,12 +136,13 @@ void keyboard_post_init_user(void) {
     set_auto_mouse_enable(true);
     bkpd_set_auto_precision_on_mouse_layer_enabled(false);
 
-    /* Invert Y so ball up (y<0) becomes positive scroll buffer → v=+1 (wheel up). */
-    bkpd_set_dragscroll_axis_invert_y(true);
-    bkpd_set_dragscroll_axis_invert_x(false);
+    /* Invert Y so ball up (y<0) becomes positive scroll buffer → v=+1 (wheel up).
+     * The setters write EEPROM, so only call them when the value differs. */
+    if (!bkpd_mode_get_invert(MODE_DRAGSCROLL, 1)) bkpd_mode_set_invert(MODE_DRAGSCROLL, 1, true);
+    if (bkpd_mode_get_invert(MODE_DRAGSCROLL, 0)) bkpd_mode_set_invert(MODE_DRAGSCROLL, 0, false);
 
     /* Force ~800 DPI on the sensor. */
-    bkpd_set_pointer_default_dpi(800);
+    if (bkpd_mode_get_dpi(MODE_NORMAL) != 800) bkpd_mode_change_dpi(MODE_NORMAL, 800);
     pointing_device_set_cpi(800);
 }
 
