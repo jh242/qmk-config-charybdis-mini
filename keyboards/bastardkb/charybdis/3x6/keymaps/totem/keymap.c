@@ -52,7 +52,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   [LAYER_SYM] = LAYOUT(
        _______, KC_EXLM, KC_AT,   KC_HASH, KC_DLR,  KC_PERC,     KC_CIRC, KC_AMPR, KC_ASTR, KC_LPRN, KC_RPRN, _______,
        _______, KC_LBRC, KC_RBRC, KC_LPRN, KC_RPRN, KC_TILD,     KC_MINS, KC_EQL,  KC_LBRC, KC_RBRC, KC_BSLS, _______,
-       _______, KC_LCBR, KC_RCBR, KC_LT,   KC_GT,   _______,     KC_UNDS, KC_PLUS, KC_LCBR, KC_RCBR, KC_PIPE, KC_GRV,
+       _______, KC_LCBR, KC_RCBR, KC_LT,   KC_GT,   KC_QUES,     KC_UNDS, KC_PLUS, KC_LCBR, KC_RCBR, KC_PIPE, KC_GRV,
                                   _______, _______, _______,     _______, _______
   ),
 
@@ -79,6 +79,19 @@ combo_t key_combos[] = {
     COMBO(combo_jk_esc, KC_ESC),
     COMBO(combo_zx_caps, QK_CAPS_WORD_TOGGLE),
 };
+
+// Shift HRMs are exempt so a fast "t" → Shift+/ still yields "?" instead of "f/".
+uint16_t get_flow_tap_term(uint16_t keycode, keyrecord_t *record, uint16_t prev_keycode) {
+    switch (keycode) {
+        case HRM_F:
+        case HRM_J:
+            return 0;
+    }
+    if (is_flow_tap_key(keycode) && is_flow_tap_key(prev_keycode)) {
+        return FLOW_TAP_TERM;
+    }
+    return 0;
+}
 
 layer_state_t layer_state_set_user(layer_state_t state) {
     return update_tri_layer_state(state, LAYER_NAV, LAYER_SYM, LAYER_NUM);
