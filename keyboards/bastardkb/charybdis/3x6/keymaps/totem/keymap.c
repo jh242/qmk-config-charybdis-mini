@@ -137,3 +137,50 @@ void keyboard_post_init_user(void) {
 report_mouse_t pointing_device_task_user(report_mouse_t mouse_report) {
     return mouse_report;
 }
+
+#ifdef POINTING_DEVICE_AUTO_MOUSE_ENABLE
+#    define MOUSE_KEY_RELEASE_GRACE_MS 300
+
+static uint16_t last_motion_timer;
+static uint16_t last_mouse_key_release_timer;
+static int16_t  motion_acc_x, motion_acc_y;
+
+// Only ball motion activates/refreshes; once on, any motion counts as keep-alive.
+bool auto_mouse_activation(report_mouse_t report) {
+    bool moved = report.x || report.y || report.h || report.v;
+    if (moved && layer_state_is(LAYER_POINTER)) {
+        last_motion_timer = timer_read();
+        return true;
+    }
+    if (timer_elapsed(last_motion_timer) > AUTO_MOUSE_TIME) {
+        motion_acc_x = motion_acc_y = 0;
+    }
+    if (moved) {
+        last_motion_timer = timer_read();
+        motion_acc_x += report.x + report.h;
+        motion_acc_y += report.y + report.v;
+    }
+    if (abs(motion_acc_x) > AUTO_MOUSE_THRESHOLD || abs(motion_acc_y) > AUTO_MOUSE_THRESHOLD) {
+        motion_acc_x = motion_acc_y = 0;
+        return true;
+    }
+    return false;
+}
+
+bool process_record_user(uint16_t keycode, keyrecord_t *record) {
+    if (!record->event.pressed && layer_state_is(LAYER_POINTER) && IS_MOUSEKEY(keycode)) {
+        last_mouse_key_release_timer = timer_read();
+    }
+    return true;
+}
+
+// QMK restarts the timeout on every mouse-key release; cap that to a short grace.
+void housekeeping_task_user(void) {
+    if (!layer_state_is(LAYER_POINTER) || !get_auto_mouse_enable() || get_auto_mouse_toggle() || get_auto_mouse_key_tracker() > 0) {
+        return;
+    }
+    if (timer_elapsed(last_motion_timer) > AUTO_MOUSE_TIME && timer_elapsed(last_mouse_key_release_timer) > MOUSE_KEY_RELEASE_GRACE_MS) {
+        auto_mouse_layer_off();
+    }
+}
+#endif
